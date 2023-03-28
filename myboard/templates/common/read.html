@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[회원정보보기]</title>
+</head>
+<body>
+    <h1>회원정보보기</h1>
+    <table border = "1">
+        <tr>
+            <th>아이디</th>
+            <td>
+                {{ user.username}}
+            </td>
+        </tr>
+        <tr>
+            <th>성</th>
+            <td>
+                {{user.first_name}}
+            </td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td>
+                {{user.last_name}}
+            </td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td>
+                {{user.email}}
+            </td>
+        </tr>
+    </table>
+    <a href = "{% url 'common:update' %}">정보수정<a>&nbsp;&nbsp;
+    <a href = "{% url 'common:delete' %}" onclick="return confirm('정말 삭제하시겠습니까?')">정보삭제<a>
+</body>
+</html>

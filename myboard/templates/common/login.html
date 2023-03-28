@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[로그인]</title>
+</head>
+<body>
+    <h1>로그인</h1>
+    <!-- POST로 보낼때는 주소뒤에 / 붙히기!!! -->
+    <form action="{% url 'common:login' %}" method="POST">
+        {% csrf_token %}
+        <!-- 로그인 성공 후 이동할 URL -->
+        <!-- hidden 태그 next의 value로 {{ next }}를 사용하면 주소의 쿼리스트링에 있던 ?next=주소로 이동
+             vlaue로 특정 문자열을 사용하면 해당하는 특정 주소로 이동-->
+        <input type = "hidden" name = "next" value = "/board/">
+        <table>
+            <tr>
+                <th>아이디</th>
+                <!-- name 속성의 username, paswword은 장고 auth에서 정해진 키?-->
+                <td><input type="text" name = "username"></td>
+            </tr>
+            <tr>
+                <th>비밀번호</th>
+                <td><input type="password" name = "password"><br></td>
+            </tr>
+            <tr>
+                <th colspan= "2"><input type= "submit" value= "로그인"></th>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

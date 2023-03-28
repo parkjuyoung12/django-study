@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="kor">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>친구 정보 수정</h1>
+    <!-- ../를 하면 /update_firend/update_friend 주소로 가져서 오류, 2칸 위로 가야된다-->
+    <form action="../../update_friend/{{ friend.id }}/" method="post">
+        {% csrf_token %}
+        이름 : <input type="text" name="friend_name" value="{{ friend.friend_name }}"/><br />
+        나이 : <input type="text" name="friend_age" value="{{ friend.friend_age }}"/><br />
+        친구소개 : <textarea cols="50" rows="3" name="friend_bigo"/>{{ friend.friend_bigo }}</textarea><br />
+        <input type="submit" value="수정" />
+    </form>
+  </body>
+</html>

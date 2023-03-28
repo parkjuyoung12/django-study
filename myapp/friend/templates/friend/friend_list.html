@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="kor">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- static file 불러오기 load static -->
+    {% load static %} <link rel = "stylesheet" href="{% static 'style.css' %}"
+  </head>
+  <body>
+    <h1>친구 목록</h1>
+    <!-- {{ fList }}<br /> -->
+
+    <!-- 반복해서 출력하려면...? -->
+    <!-- {% for friend in fList %}
+    이름 : {{friend.friend_name}}<br />
+    나이 : {{friend.friend_age}}<br />
+    친구소개 : {{friend.friend_bigo}}<br />
+    <br />
+    {% endfor %} -->
+
+    <table>
+      <tr>
+        <th>번호</th>
+        <th>이름</th>
+        <th>나이</th>
+        <th>소개</th>
+        <th>수정/삭제</th>
+      </tr>
+      {% for friend in fList %}
+      <tr>
+        <td>{{friend.id}}</td>
+        <td>{{friend.friend_name}}</td>
+        <td>{{friend.friend_age}}</td>
+        <td>{{friend.friend_bigo}}</td>
+        <td>
+          <a href="../update_friend/{{friend.id}}">수정</a> /
+          <a href="../delete_friend/{{friend.id}}/">삭제</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <form action="../search_name/" method="post">
+      {% csrf_token %}
+      <input type="text" name="search_name" /><input
+        type="submit"
+        value="검색"
+      />
+    </form>
+    <a href="../../friend/">목록</a>
+    <a href="../../friend/add_friend">친구추가</a>
+  </body>
+</html>

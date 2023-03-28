@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% comment %} <script>
+        function confirmDelete(){
+            let c = confirm('정말 삭제하시겠습니까?')
+
+            if(c){
+                alert('삭제완료')
+                location.href = '/delete/'
+            }
+        }
+    </script> {% endcomment %}
+</head>
+<body>
+    <h1>안녕하세요~</h1>
+    <!-- django에서 제공하는 User 모델 -->
+    <h2>
+        Hello, 
+        {% if user.is_authenticated %} <!-- user 정보가 있으면 username 표시 -->
+            {{ user.username }}!
+        {% else %} <!-- 없으면 GUEST 표시 -->
+            GUEST
+        {% endif %}
+    </h2>
+    <ul>
+        {% if not user.is_authenticated %}
+        <li>
+            <a href="{% url 'common:signup' %}">회원가입</a>
+        </li>
+        {% endif %}
+        {% if not user.is_authenticated %} <!-- 로그인 하지 않았으면 로그인 표시 -->
+        <li>
+            <a href="{% url 'common:login' %}">로그인</a>
+        </li>
+        {% elif user.is_authenticated %} <!-- 로그인한 경우 로그아웃 표시-->
+        <li>
+            <a href="{% url 'common:logout' %}">로그아웃</a>
+        </li>
+        <li>
+            <a href="{% url 'common:read' %}">회원정보보기</a>
+        </li>
+        {% comment %} <li>
+            <a href="#" onclick = "confirmDelete()">회원정보삭제</a>
+        </li> {% endcomment %}
+        {% endif %}
+        <li>
+            <!-- app_name : url_name -->
+            <a href="{% url 'board:index' %}">게시판으로 가기</a>
+        </li>
+    </ul>
+</body>
+</html>

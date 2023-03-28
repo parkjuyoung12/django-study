@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[회원수정]</title>
+</head>
+<body>
+    <h1>회원수정</h1>
+    <form action = "{% url 'common:update' %}" method = "POST">
+    {% csrf_token %}
+        <table border = "1">
+            <tr>
+                <th>아이디</th>
+                <td>
+                    {{ user.username}}
+                </td>
+            </tr>
+            <tr>
+                <th>성</th>
+                <td>
+                    <input type = "text" name = "first_name" value = "{{user.first_name}}">
+                </td>
+            </tr>
+            <tr>
+                <th>이름</th>
+                <td>
+                    <input type = "text" name = "last_name" value = "{{user.last_name}}">
+                </td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td>
+                    <input type = "text" name = "email" value = "{{user.email}}">
+                </td>
+            </tr>
+        </table>
+        <input type = "submit" value = "정보수정">
+    </form>
+</body>
+</html>

@@ -1,0 +1,17 @@
+/* friend 앱에 사용할 스타일 */
+
+table,
+tr,
+th,
+td {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: lime;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주문 수정</title>
+  </head>
+  <body>
+    <h1>주문 수정</h1>
+    <form action="../../../list_order/{{order.id}}/update/" method="POST">
+      {% csrf_token %}
+      <table border="1">
+        <tr>
+          <th>번호</th>
+          <td>{{order.id}}</td>
+        </tr>
+        <tr>
+          <th>제품명</th>
+          <td>
+            <input
+              type="text"
+              name="prouduct_name"
+              value="{{order.order_text}}"
+            />
+          </td>
+        </tr>
+        <tr>
+          <th>가격</th>
+          <td><input type="text" name="price" value="{{order.price}}" />원</td>
+        </tr>
+        <tr>
+          <th>주소</th>
+          <td>
+            <input type="text" name="address" value="{{order.address}}" />
+          </td>
+        </tr>
+        <tr>
+          <th>시간</th>
+          <td>{{order.order_time}}</td>
+        </tr>
+      </table>
+      <input type="submit" value="확인" />
+    </form>
+  </body>
+</html>

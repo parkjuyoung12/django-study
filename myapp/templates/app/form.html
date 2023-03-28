@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="kor">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- artion에 지정한 주소 호출 -->
+    <form action="call_submit" method="post">
+      <!-- 장고가 알아서 넣어주는 보안 토큰 -->
+      {% csrf_token %}
+      <!-- 폼에서 서버로 데이터를 보낼때 csrf토큰이 없으면 폼 전송 불가 -->
+      <!-- 폼에 있는 내용을 서버에서 사용하기 위해서는 name 속성 지정 -->
+      이름 : <input type="text" name="name" /><br />
+      나이 : <input type="text" name="age" /><br />
+      <input type="submit" value="전송" />
+    </form>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+{% extends 'common/base.html' %}
+  {% block title %}[글 보기]{% endblock title %}
+  {% block body %}
+    <br>
+    <h1>#{{ board.id }}</h1>
+    <table border="1">
+      <tr>
+        <th>제목</th>
+        <td>{{ board.title }}</td>
+      </tr>
+      <tr>
+        <th>글쓴이</th>
+        <td>{{ board.author.username }}</td>
+      </tr>
+      <tr>
+        <th>내용</th>
+        <td>{{ board.content }}</td>
+      </tr>
+      <tr>
+        <th>조회수</th>
+        <td>{{ board.view_count }}</td>
+      </tr>
+      <tr>
+        <th>날짜</th>
+        <td>{{ board.input_date }}</td>
+      </tr>
+    </table>
+    <br />
+    <!-- 수정, 삭제 -->
+    <!-- username끼리 비교하려면 아래처럼 -->
+    {% comment %} {% if board.author == user %} board.author는 user하고 비교한다 {% endcomment %}
+    {% if board.author.username == user.username %}
+      <a href="{% url 'board:update' board.id %}">수정</a>&nbsp; 
+      <a href="{% url 'board:delete' board.id %}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>&nbsp;
+    {% endif %}
+    <br />
+    <a href="{% url 'board:index' %}">목록으로</a>
+  {% endblock body %}

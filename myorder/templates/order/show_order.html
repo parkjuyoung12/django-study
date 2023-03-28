@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주문 보기</title>
+    <script>
+      function chkdel() {
+        if (!confirm("정말 삭제하시겠습니까?")) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>주문 보기</h1>
+    <form action="../../list_order/{{order.id}}/" method="POST">
+      {% csrf_token %}
+      <table border="1">
+        <tr>
+          <th>번호</th>
+          <td>{{order.id}}</td>
+        </tr>
+        {% for m in menu %}
+        <tr>
+          <th>제품명</th>
+          <td>{{ m }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <th>가격</th>
+          <td>{{order.price}}원</td>
+        </tr>
+        <tr>
+          <th>주소</th>
+          <td>{{order.address}}</td>
+        </tr>
+        <tr>
+          <th>시간</th>
+          <td>{{order.order_time}}</td>
+        </tr>
+      </table>
+      <a href="../">목록</a>&nbsp;&nbsp;
+      <a href="../../list_order/{{order.id}}/update">수정하기</a>&nbsp;&nbsp;
+      <a
+        href="../../list_order/{{order.id}}/delete"
+        onclick="return confirm('정말 삭제하시겠습니까?')"
+        >삭제하기</a
+      >
+    </form>
+  </body>
+</html>

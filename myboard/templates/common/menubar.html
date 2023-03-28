@@ -1,0 +1,19 @@
+<!-- vs code에서 .입력하고 자동완성 하면 div -->
+<div>
+    <a href="{% url 'common:index' %}">홈</a>&nbsp;&nbsp;
+    {% if not user.is_authenticated %}
+        <a href="{% url 'common:signup' %}">회원가입</a>&nbsp;&nbsp;
+        <a href="{% url 'common:login' %}">로그인</a>&nbsp;&nbsp;
+    {% elif user.is_authenticated %}
+        <a href="{% url 'common:logout' %}">로그아웃</a>&nbsp;&nbsp;
+        <a href="{% url 'common:read' %}">회원정보보기</a>&nbsp;&nbsp;
+    {% endif %}
+    <!-- 아래의 호출법은 주소를 하드코딩하는게 아니라 -->
+    <!-- urls.py에 정의된 name 속성을 통해서 이동 -->
+    <a href="{% url 'board:index' %}">게시판으로 이동</a>
+</div>
+<div>
+    {% if user.is_authenticated %}
+      {{user.username}}님 안녕하세요!
+    {% endif %}
+</div>

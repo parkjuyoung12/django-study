@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="kor">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>호출됐음!</h1>
+    <!-- 템플릿 언어를 사용해서 context변수 안에 넣은 key로 데이터 표시가능 -->
+    <!-- { {} } : 템플릿 언어 -->
+    <!-- 스프링에서 model객체에 attribute를 추가하면서 "키", "값" 비슷 -->
+    <h3>문자열 하나 보내기</h3>
+    <p>{{ item }}</p>
+    <p>{{ name }}</p>
+
+    <h3>리스트 보내기</h3>
+    <p>{{ board_list }}</p>
+
+    <h3>딕셔너리 보내기</h3>
+    <!-- mydata라는 딕셔너리 그 자체를 출력 -->
+    <p>{{ mydata }}</p>
+
+    <!-- mydata.속성이름 : 해당 속성값만 출력 -->
+    <p>{{ mydata.name }}</p>
+    <p>{{ mydata.age }}</p>
+    <p>{{ mydata.adress }}</p>
+  </body>
+</html>

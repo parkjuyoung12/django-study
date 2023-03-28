@@ -1,0 +1,29 @@
+<!-- VSCode에서는 새 파일에 아무 내용도 안들어있음 -->
+<!-- HTML 기본 구조를 추가하려면 느낌표 + 엔터 -->
+<!DOCTYPE html>
+<html lang="kor">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Django 연습하기</h1>
+    <ul>
+      <!-- 백단을 부르는 3가지 방법 -->
+      <!-- (절대참조 방식) http://localhost:8000/app/call1 -->
+      <!-- (아래는 상대참조 방식) -->
+      <li><a href="call1">주소 호출하기</a></li>
+      <!-- 주소를 통해서 표현하고자 하는 정보를 알기 쉽게 작성 하는 방법 -->
+      <li><a href="2">RESTful 주소 호출하기</a></li>
+      <li>
+        <a href="call3?name=홍길동&age=20">쿼리스트링으로 주소 호출하기</a>
+      </li>
+      <li><a href="call4">서버에서 데이터 받아오기</a></li>
+      <li><a href="call5">템플릿 태그 연습하기</a></li>
+      <li><a href="call6">폼 태그 연습하기</a></li>
+      <li><a href="call7">소개</a></li>
+    </ul>
+  </body>
+</html>

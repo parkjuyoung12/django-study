@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=
+    , initial-scale=1.0"
+    />
+    <title>주문 조회</title>
+  </head>
+  <body>
+    <h1>주문 목록</h1>
+    <table border="1">
+      <tr>
+        <th>번호</th>
+        <th>제품</th>
+        <th>가격</th>
+        <th>주소</th>
+        <th>시간</th>
+      </tr>
+      {% for order in order_list %}
+      <tr>
+        <td><a href="../list_order/{{order.id}}">{{order.id}}</a></td>
+        <td>{{order.order_text}}</td>
+        <td>{{order.price}}</td>
+        <td>{{order.address}}</td>
+        <td>{{order.order_time}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <form action="../search_order/" method="post">
+        {% csrf_token %}
+        <select name="check">
+            <option value="text">제품</option>
+            <option value="address">주소</option>
+        </select>
+        <input type="text" name="search_order" /><input
+          type="submit"
+          value="검색"
+        />
+        <input type="radio" name="startwith">전방일치
+        <br><a href="../">메인으로</a>
+  </body>
+</html>

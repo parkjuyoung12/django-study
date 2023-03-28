@@ -1,0 +1,33 @@
+{# common/base.html을 상속 받겠음 #}
+{% extends 'common/base.html' %}
+  {% block title %}[글 쓰기]{% endblock title %}
+    {% block body %}
+    <h1>[글 쓰기]</h1>
+    <!-- 상위 디렉토리로 이동한 후에 write/ 호출 -->
+    <form action="{% url 'board:write' %}" method="POST">
+      {% csrf_token %}
+      <table>
+        <tr>
+          <th>제목</th>
+          <td><input type="text" name="title" /></td>
+        </tr>
+        <!-- session에 writer가 없으면 해당 tr 표시 -->
+        <!-- session에 writer가 있으면 tr표시 안함 -->
+        {% if not request.session.writer %}
+        {% comment %} <tr>
+          <th>글쓴이</th>
+          <td><input type="text" name="writer" /></td>
+        </tr> {% endcomment %}
+        {% endif %}
+        <tr>
+          <th>내용</th>
+          <td><textarea name="content"></textarea></td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <input type="submit" value="글쓰기" />
+          </th>
+        </tr>
+      </table>
+    </form>
+  {% endblock body %}
