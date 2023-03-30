@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from .models import Board
-from django.http import HttpResponseRedirect
+from .models import Board, Reply
+from django.http import HttpResponseRedirect, JsonResponse
 from django.core.paginator import Paginator
+from django.core import serializers
 from django.contrib.auth.decorators import login_required
 
+from json import loads
 # Create your views here.
 
 # localhost:8000으로 왔을때 board로 연결
@@ -72,12 +74,17 @@ def read(request, id):
 
     board = Board.objects.get(id = id)
 
+    # 고전적인 방법으로 가져오기
+    # reply_list = Reply.objects.filter(board_obj = id).order_by('-id')
+    
+
     # 조회수 올리기
     board.view_count += 1
     board.save()
 
     context = {
-        'board' : board
+        'board' : board,
+        # 'replyList' : reply_list
     }
 
     return render(request, 'board/read.html', context)
@@ -154,7 +161,88 @@ def delete(request, id):
     # 다를때
     return HttpResponseRedirect('/board/')
 
+def write_reply(request, id):
+    print(request.POST)
 
+    user = request.user
+    # 변수                     html에 지정한 name
+    reply_text = request.POST['replyText']
 
+    # Reply.objects.create(
+    #     user = user,
+    #     reply_content = reply_text,
+    #     board_obj = Board.objects.get(id = id)
+    # )
+    
+    # QuerySet을 이용해 봅시다.
+    board = Board.objects.get(id = id)
+    board.reply_set.create(
+        reply_content = reply_text,
+        user = user
+    )
 
+    return HttpResponseRedirect('/board/' + str(id))
+    
+def delete_reply(request, id, rid):
+    print(f'id: {id} rid: {rid}')
 
+    Board.objects.get(id = id).reply_set.get(id = rid).delete()
+
+    # Reply.objects.get(id = rid).delete()
+    
+    return HttpResponseRedirect('/board/' + str(id))
+
+def update_reply(request, id):
+    # rid = request.GET['rid']
+    
+    if request.method == 'GET':
+        rid = request.GET['rid']
+
+        board = Board.objects.get(id = id)
+        
+        context = {
+            'update': 'update',
+            'board' : board, # id에 해당하는 Board 객체
+            'reply' : board.reply_set.get(id = rid) # rid에 해당하는 Reply 객체
+        }
+        return render(request, 'board/read.html', context)
+    
+    else : 
+        rid = request.POST['rid']
+        reply = Board.objects.get(id = id).reply_set.get(id = rid) 
+        
+        # 폼에 들어있던 새로운 댓글 텍스트로 갱신
+        reply.reply_content = request.POST['replyText']
+        
+        reply.save()
+        return HttpResponseRedirect('/board/' + str(id))
+    
+
+def call_ajax(request):
+    print("성공한거 같아요.")
+    print(request.POST)
+    # JSON.stringify 하면 아래 표현은 사용할 수 없음.
+    # print(request.POST['txt'])
+    
+    data = loads(request.body)
+    print("템플릿에서 보낸 데이터 : ",data)
+    print(type(data))
+    print(data['txt'])
+
+    return JsonResponse({'reuslt':'czcz'})
+
+def load_reply(request):
+    id = request.POST['id']
+    # 1번 방법
+    # reply = Reply.objects.filter(board = id)
+    # print("reply", reply)
+    reply_list = Board.objects.get(id = id).reply_set.all()
+
+    # QuerySet 그 자체는 JS에서는 알 수 없는 타입
+    # 그래서 JSON타입으로 형변환
+    serialized_list = serializers.serialize("json", reply_list)
+    print("serialized_list : ", serialized_list)
+
+    response = {'response' : serialized_list}
+    return JsonResponse(response)
+    

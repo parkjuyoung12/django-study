@@ -1,12 +1,35 @@
 {# common/base.html을 상속 받겠음 #}
 {% extends 'common/base.html' %}
-  {% block title %}[게시판]{% endblock title %}
-  
-  {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static 'static/style.css' %}">
+{% block title %}[게시판]{% endblock title %}
+{% block body %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'static/style.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script>
+  $(document).ready(function(){
+      // alert(' 하이')
+    });
 
-    {% block body %}
-    <h1>게시판</h1>
+    function callFunction() {
+      
+      let data = {'txt':'hello'};
+
+      // AJAX로 서버와 통신을 할 때에도 
+      // CSRF토큰은 있어야 한다.
+      $.ajax({
+        url: '/board/callAjax/',
+        type: 'post',
+        headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
+        data : JSON.stringify(data), // JS객체를 문자열화
+        success: function(res) {
+          console.log(res);
+          console.log(res.result); // res 객체에 들어있는 result라는 필드
+          console.log('성공했음');
+        }
+      });
+    };
+</script>
+<h1>게시판</h1>
     <!-- board_list 있을 때 -->
     {% if page_obj %}
     <table border="1">
@@ -104,4 +127,6 @@
     {% if user.is_authenticated %}
       <a href="{% url 'board:write' %}">글쓰기</a>
     {% endif %}
+    <input type="button" value="눌러보세요." onclick="callFunction()">
+    <div id="result"></div>
     {% endblock body %}

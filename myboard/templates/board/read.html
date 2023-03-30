@@ -1,6 +1,84 @@
 {% extends 'common/base.html' %}
-  {% block title %}[글 보기]{% endblock title %}
-  {% block body %}
+{% block title %}[글 보기]{% endblock title %}
+{% block body %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script>
+  function showUpdateForm(param) {
+    // location.href='update_reply?rid=' + param; 
+    alert(param)
+    $.ajax({
+    url: '/'+param+'/update_reply/',
+    type: 'post',
+    headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
+    data: {'rid':param},
+    success: function(response) {
+      alert('성공')
+    }
+  });
+  }
+
+ $(document).ready(function(){
+  loadReplyList();
+ }); 
+ 
+ function deleteReply(data){
+  // location.href='../{{board.id}}/delete_reply/' + data;
+  // '<int:id>/delete_reply/<int:rid>/'
+   let rNum = data;
+   let bNum = '{{board.id}}'
+   alert(bNum);
+   alert(rNum);
+  
+  $.ajax({
+    url: '../{{board.id}}/delete_reply/'+rNum+'/',
+    type: 'post',
+    headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
+    data: {'id':bNum, 'rid':rNum},
+    success: function(response) {
+      loadReplyList();
+    }
+  });
+ }
+  function loadReplyList() {
+    // console.log('여기는 loadReplyList ');
+    let bNum = '{{ board.id }}';
+    console.log(bNum)
+      $.ajax({
+        url: '/board/load_reply/',
+        type: 'post',
+        headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
+        data: {'id':bNum},
+        success: function(response) {
+          console.log(JSON.parse(response['response']))
+          console.log(response['response'])
+          
+          let reply_list = JSON.parse(response["response"])
+          let str = '';
+          $.each(reply_list, function(i, item){
+            // console.log(i + " " + item.fields.reply_content);
+            // var replyContent = item.fields.reply_content;
+            let replyContent = item.fields.reply_content;
+            let replyUser = item.pk;
+            let boardUser = item.fields.board_obj;
+            
+            // 화면에 바로 붙이려면 append
+            // $("#replyList").append(replyContent + "<br>");
+              
+              str += replyContent;
+              str += replyUser;
+
+              str += "<a href='#' onclick='javascript:showUpdateForm(\"" + replyUser + "\")'>수정</a>"
+              str += "<a herf='#' onclick='javascript:deleteReply(\"" + replyUser +"\")'> 삭제</a>";
+              str += "<br>";
+            });
+            
+          // HTML을 만들어서 한번에 넣으려면 html
+            $("#replyList").html(str)
+            
+        }
+      });
+  }
+</script>
     <br>
     <h1>#{{ board.id }}</h1>
     <table border="1">
@@ -33,6 +111,46 @@
       <a href="{% url 'board:update' board.id %}">수정</a>&nbsp; 
       <a href="{% url 'board:delete' board.id %}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>&nbsp;
     {% endif %}
+    <div id="replyArea">
+      <!-- 댓글 모록 표시할 곳 -->
+      <div id="replyList">
+        
+        <!-- board 객체 뿐만 아니라 board와 FK로 엮인 객체는 -->
+        <!-- board.모델이름_set으로 가져올 수 있다. -->
+        <!-- {% if board.reply_set %}
+          {% for reply in board.reply_set.all %}
+            {{ reply }}&nbsp;&nbsp;&nbsp;
+            <br>
+            {% endfor %}
+            <a href="#" onclick="showUpdateForm('{{reply.id}}')">수정</a> / 
+            <a href="{ % url 'board:delete_reply' id=board.id rid=reply.id %}">삭제</a>
+            {% else %}
+            <p>등록된 댓글이 없습니다.</p>
+            {% endif %} -->
+          
+
+        
+        
+      </div>
+      
+      <!-- 댓글 입력 폼 -->
+      <div id="replyForm">
+        {% if not update %} <!-- context에 update에 대한 값을 찾지 못했을 때 -->
+        <form action="{% url 'board:write_reply' board.id %}" method="post">
+          {% csrf_token %}
+          <textarea name="replyText"></textarea>
+          <input type="submit" value="댓글쓰기">
+        </form>
+        {% else %}
+        <form action="{% url 'board:update_reply' board.id %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name = "rid" value="{{ reply.id }}">
+          <textarea name="replyText">{{ reply.reply_content }}</textarea>
+          <input type="submit" value="수정">
+        </form>
+        {% endif %}
+      </div>
+    </div>
     <br />
     <a href="{% url 'board:index' %}">목록으로</a>
   {% endblock body %}
