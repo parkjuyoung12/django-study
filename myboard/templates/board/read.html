@@ -96,6 +96,10 @@
     
     // 1. textArea에 쓴 
     let replyText = $("#replyTextWrite").val();
+    if(replyText.length === 0 ){
+      alert('댓글을 입력할 수 없습니다.');
+      return ;
+    }
     let data = {'replyText':replyText}
     $.ajax({
       url: '{% url "board:write_reply" id=board.id %}',
@@ -231,7 +235,7 @@
         <div id="updateForm">
           <input type="hidden" name = "rid" value="" id="rid">
           <textarea name="replyText" id="replyTextUpdate"></textarea>
-          <input type="submit" value="댓글수정" id="btnUpdate">
+          <input type="submit" value="댓글수정" id="btnUpdate" onsubmit="return validateReply();">
         </div>
       </div>
     </div>
