@@ -2,6 +2,8 @@
 {% block title %}[글 보기]{% endblock title %}
 {% block body %}
 <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="../../static/script.js" ></script>
+
 <script>
   function showUpdateForm(param) {
     // location.href='update_reply?rid=' + param; 
@@ -45,7 +47,9 @@
     // 2. 댓글쓰기 버튼에 이벤트 달기
     $("#btnWrite").click(function() {
       // alert('여기는 write');
-      writeReply();
+      if(validateReply()){
+        writeReply();
+      }
     });
 
     // 3. 수정하기 버튼에 이벤트 달기
@@ -172,6 +176,7 @@
 </script>
     <br>
     <h1>#{{ board.id }}</h1>
+
     <table border="1">
       <tr>
         <th>제목</th>
@@ -220,13 +225,13 @@
       <!-- 댓글 입력 폼 -->
       <div id="replyForm">
         <div id="writeForm"> <!-- 글쓰기 폼 -->
-          <textarea name="replyText" id="replyTextWrite"></textarea>
-          <input type="button" value="댓글쓰기" id="btnWrite">
+          <textarea name="replyText" id="replyTextWrite" ></textarea>
+          <input type="button" value="댓글쓰기" id="btnWrite" onsubmit="return validateReply();" >
         </div>
         <div id="updateForm">
           <input type="hidden" name = "rid" value="" id="rid">
           <textarea name="replyText" id="replyTextUpdate"></textarea>
-          <input type="button" value="댓글수정" id="btnUpdate">
+          <input type="submit" value="댓글수정" id="btnUpdate">
         </div>
       </div>
     </div>

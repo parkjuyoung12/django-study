@@ -95,23 +95,24 @@
     페이징 1 : 
     <!-- has_previous : 이전 페이지 유무 -->
     {% if page_obj.has_previous %}
-      <a href="?page=1">&laquo;처음 페이지로</a>
-      <a href="?page={{ page_obj.previous_page_number }}">이전 페이지로</a>
+    <!-- GET의 parameter(쿼리스트링)은 URL의 구성요소와 별도로 표시 -->
+      <a href="{% url 'board:index' %}?page=1">&laquo;처음 페이지로</a>
+      <a href="{% url 'board:index' %}?page={{ page_obj.previous_page_number }}">이전 페이지로</a>
     {% endif %}    
     <!-- Paginator의 number : 현재 페이지 번호 -->
     <!-- num_page : 전체 페이지 수 -->
     Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
     <!-- has_next : 다음 페이지 유무 -->
     {%if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}">다음 페이지로</a>
-      <a href="?page={{ page_obj.paginator.num_pages }}">마지막 페이지로 &raquo;</a>
+      <a href="{% url 'board:index' %}?page={{ page_obj.next_page_number }}">다음 페이지로</a>
+      <a href="{% url 'board:index' %}?page={{ page_obj.paginator.num_pages }}">마지막 페이지로 &raquo;</a>
     {% endif %}
     <br>
 
     <!-- 페이징2 : 가지고 있는 페이지의 번호 다 보여주기 -->
     페이징 2 : 
     {% for page_number in page_obj.paginator.page_range %}
-      <a href="?page={{ page_number }}">{{ page_number }}</a> &nbsp;
+      <a href="{% url 'board:index' %}?page={{ page_number }}">{{ page_number }}</a> &nbsp;
     {% endfor %}
     <br>
 
@@ -120,19 +121,19 @@
     {% for page_number in page_obj.paginator.page_range %}
     {% if page_number >= page_obj.number|add:-5 and page_number <= page_obj.number|add:5 %}
         {% if searchWord %}
-            <a href="?page={{ page_number }}&searchType={{ searchType }}&searchWord={{ searchWord }}">{{ page_number }}</a>
+            <a href="{% url 'board:index' %}?page={{ page_number }}&searchType={{ searchType }}&searchWord={{ searchWord }}">{{ page_number }}</a>
         {% else %}
             {% if page_number == page_obj.number %}
-                <a href="?page={{ page_number }}" class="current">{{ page_number }}</a> &nbsp;
+                <a href="{% url 'board:index' %}?page={{ page_number }}" class="current">{{ page_number }}</a> &nbsp;
             {% else %}
-                <a href="?page={{ page_number }}">{{ page_number }}</a> &nbsp;
+                <a href="{% url 'board:index' %}?page={{ page_number }}">{{ page_number }}</a> &nbsp;
             {% endif %}
         {% endif %}
     {% endif %}
     {% endfor %}
     <br>
     {% if user.is_authenticated %}
-      <a href="{% url 'board:write' %}">글쓰기</a>
+      <a href="{% url 'board:write' %}" >글쓰기</a>
     {% endif %}
     <input type="button" value="눌러보세요." onclick="callFunction()">
     <div id="result"></div>

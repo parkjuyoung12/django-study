@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from json import loads
 # Create your views here.
@@ -311,5 +311,16 @@ class BoardList(ListView):
     # model = 이 페이지에서 표시 할 객체 타입
     model = Board
 
-    # 클래스 기반 뷰에서 
+    # ordering 속성에는 문자열로 내가 정렬하고 싶은 열 이름을 쓴다.
+    # 열 이름 앞에 -가 붙어있으면 내림차순 정렬
+    ordering='-id'
+    
+    # 클래스 기반 뷰에서 사용하는 템플릿은
+    # 일반적으로 이름이 객체이름_list.html
 
+class BoardDetail(DetailView):
+    model = Board
+    # template_name 속성 : 내가 별도로 이용하고 싶은 템플릿 파일이 있을때
+    # 해당 파일 이름 지정
+    # template_name을 사용하지 않으면 model이름_detail.html을 찾아간다.
+    template_name = 'board/read.html'

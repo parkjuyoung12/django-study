@@ -8,5 +8,11 @@
 </head>
 <body>
     <h1>CBV로 객체 가져오기</h1>
+    <!-- 클래스기반에서는 기본적으로 리스트 이름을 객체이름_list로 사용가능 -->
+    {% for board in board_list %}
+    <a href="{{board.id}}/">
+        <span>{{board.id}} {{board.title}}</span><br>
+    </a>
+    {% endfor %}
 </body>
 </html>
