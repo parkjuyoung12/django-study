@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+# 현재 프로젝트의 settings.py
+from django.conf import settings
+from django.conf.urls.static import static
 
 # localhost:8000으로 왔을때 board로 연결하기 위해 views의 home import
 # from board.views import home 
@@ -23,4 +26,6 @@ urlpatterns = [
     path('', include('common.urls')),
     path('admin/', admin.site.urls),
     path('board/', include('board.urls')),
-]
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+
+

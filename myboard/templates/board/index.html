@@ -47,7 +47,14 @@
         <td>
           <!-- 파라미터가 있는 주소를 호춯할 때 -->
           <!-- name 뒤에 한 칸 띄우고 파라미터의 값 지정 -->
-          <a href="{% url 'board:detail' board.id %}">{{ board.title }}</a></td>
+          <a href="{% url 'board:detail' board.id %}">
+            {{ board.title }}&nbsp;
+            <span class="replyCount">{{board.reply_set.all.count}}</span>
+            {% if board.attached_file %}
+              <img width="20" height="20" src="../../media/board/2730388_character_choper_cute_fun_inkcontober_icon.png">
+            {% endif %}  
+          </a>
+        </td>
         <td>{{ board.author }} {{ board.author_id }} {{ board.author.username}} </td>
         <td>{{ board.input_date | date:'Y/m/d H:i D' }}</td>
         <td>{{ board.view_count }}</td>

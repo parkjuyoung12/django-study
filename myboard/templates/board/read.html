@@ -5,76 +5,167 @@
 <script>
   function showUpdateForm(param) {
     // location.href='update_reply?rid=' + param; 
-    alert(param)
+    // let replyText = '{{ reply.reply_content }}'
+    // let bNum = '{{board.id}}';
+    // alert(replyText);
+    // $.ajax({
+    // url: '/board/'+'{{board.id}}'+'/update_reply/'+param+'/',
+    // type: 'post',
+    // headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
+    // data: {'id':bNum, 'rid':param, 'replyText' : replyText},
+    // success: function() {
+    //   alert('성공')
+    // }
+  // });
+    $("#writeForm").hide();
+    $("#updateForm").show();
+
     $.ajax({
-    url: '/'+param+'/update_reply/',
-    type: 'post',
-    headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
-    data: {'rid':param},
-    success: function(response) {
-      alert('성공')
-    }
-  });
+      url: '{% url "board:update_reply" id=board.id %}',
+      type: 'get',
+      data: {'rid': param},
+      success: function(res){
+        console.log(res)
+        // 폼요소.val() = 해당하는 폼 요소에 들어있는 값을 가져올 수 있다.
+        // 폼요소.val(문자열) = 문자열을 해당 폼 요소에 지정할 수 있다.
+        // 1. 수정 입력창에 댓글 내용 표시
+        $("#replyTextUpdate").val(res.replyText);
+        
+        // 2. rid라는 id를 가진 hidden 태그에 값 설정
+        $("#rid").val(param)
+
+      }
+    })
   }
 
- $(document).ready(function(){
+  $(document).ready(function() {
+    // 1. 수정 폼 숨기기
+    $("#updateForm").hide()
+
+    // 2. 댓글쓰기 버튼에 이벤트 달기
+    $("#btnWrite").click(function() {
+      // alert('여기는 write');
+      writeReply();
+    });
+
+    // 3. 수정하기 버튼에 이벤트 달기
+    $("#btnUpdate").click(function() {
+      // alert('ddd');
+      updateReply();
+    });
+
+    loadReplyList();
+  });
+
+  function updateReply() {
+    let replyText = $("#replyTextUpdate").val();
+    let rid = $("#rid").val();
+
+    console.log(replyText);
+    let data = {
+      'rid': rid,
+      'replyText' : replyText
+    }
+
+    $.ajax({
+      url: '{% url "board:update_reply" id=board.id %}',
+      type: 'post',
+      data: JSON.stringify(data),
+      headers: { 'X-CSRFTOKEN' : '{{ csrf_token }}'},
+      success: function(res) {
+        // console.log(res)
+        $("#replyTextUpdate").val("");
+        $("#updateForm").hide();
+        $("#writeForm").show();
+
+        loadReplyList();
+      }
+    })
+  }
+
+ $(document).ready(function() {
   loadReplyList();
  }); 
+
+  function writeReply() {
+    // alert('여기는 writeReply입니다.')
+    
+    // 1. textArea에 쓴 
+    let replyText = $("#replyTextWrite").val();
+    let data = {'replyText':replyText}
+    $.ajax({
+      url: '{% url "board:write_reply" id=board.id %}',
+      type: 'post',
+      data: JSON.stringify(data),
+      headers: {'X-CSRFTOKEN':' {{csrf_token}} '},
+      success: function(result) {
+        // console.log(result)
+        // 댓글창 초기화
+        $("#replyTextWrite").val("");
+        loadReplyList();
+      },
+    });
+  }
  
- function deleteReply(data){
-  // location.href='../{{board.id}}/delete_reply/' + data;
-  // '<int:id>/delete_reply/<int:rid>/'
-   let rNum = data;
-   let bNum = '{{board.id}}'
-   alert(bNum);
-   alert(rNum);
-  
+ function deleteReply(param){
+  let data = {'rid':param};
+
   $.ajax({
-    url: '../{{board.id}}/delete_reply/'+rNum+'/',
+    url: '{%url "board:delete_reply" id=board.id %}',
     type: 'post',
-    headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
-    data: {'id':bNum, 'rid':rNum},
-    success: function(response) {
+    data: JSON.stringify(data),
+    headers: { 'X-CSRFTOKEN' : '{{ csrf_token }}'},
+    success: function() {
+      // 댓글 삭제가 완료되면 
+      // 댓글 목록 다시 불러옴
       loadReplyList();
     }
-  });
+  })
+
+  // location.href='../{{board.id}}/delete_reply/' + data;
+  // '<int:id>/delete_reply/<int:rid>/'
+  // let rNum = data;
+  // let bNum = '{{board.id}}'
+  // alert(rNum);
+  // alert(bNum);
+  // replyText = document.getElementById('replyText').value()
+  // $.ajax({
+  //   url: 'delete_reply/'+rNum+'/',
+  //   type: 'post',
+  //   headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
+  //   data: {'id':bNum, 'rid':rNum, 'replyText':replyText},
+  //   success: function(response) {
+  //     loadReplyList();
+  //   }
+  // });
  }
+
   function loadReplyList() {
     // console.log('여기는 loadReplyList ');
-    let bNum = '{{ board.id }}';
-    console.log(bNum)
       $.ajax({
-        url: '/board/load_reply/',
-        type: 'post',
-        headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
-        data: {'id':bNum},
-        success: function(response) {
-          console.log(JSON.parse(response['response']))
-          console.log(response['response'])
-          
-          let reply_list = JSON.parse(response["response"])
-          let str = '';
-          $.each(reply_list, function(i, item){
-            // console.log(i + " " + item.fields.reply_content);
-            // var replyContent = item.fields.reply_content;
-            let replyContent = item.fields.reply_content;
-            let replyUser = item.pk;
-            let boardUser = item.fields.board_obj;
-            
-            // 화면에 바로 붙이려면 append
-            // $("#replyList").append(replyContent + "<br>");
-              
-              str += replyContent;
-              str += replyUser;
+        url: '{% url "board:load_reply" id=board.id %}',
+        type: 'get',
+        success: function(res) {
+          let str = "<table>";
+          $.each(res.replyList, function(index, item) {
 
-              str += "<a href='#' onclick='javascript:showUpdateForm(\"" + replyUser + "\")'>수정</a>"
-              str += "<a herf='#' onclick='javascript:deleteReply(\"" + replyUser +"\")'> 삭제</a>";
-              str += "<br>";
-            });
-            
+            // inputDate에 있는 필요없는 문자열들을 삭제
+            let replacedDate = item.inputDate.replace("T", " ").split(".")[0];
+            str += "<tr>";
+            str += "<td>" + item.replyText + "</td>";
+            str += "<td>" + item.username + "</td>";
+            str += "<td>" + replacedDate + "</td>";
+            str += "<td>";
+            if('{{user.username}}' === item.username ){
+              str += "<a href = '#' onclick='showUpdateForm(" + item.id + ")'> 수정</a>";
+              str += "<a href = '#' onclick='deleteReply(" + item.id + ")'> 삭제</a>";
+            }
+            str += "</td>";
+            str += "</tr>";
+          });
+          str += "</table>";
           // HTML을 만들어서 한번에 넣으려면 html
-            $("#replyList").html(str)
-            
+            $("#replyList").html(str);
         }
       });
   }
@@ -102,11 +193,20 @@
         <th>날짜</th>
         <td>{{ board.input_date }}</td>
       </tr>
+      {% if board.original_file_name %}
+      <tr>
+        <th>첨부파일</th>
+        <td colspan="3">
+          <!-- /board/0/download/ -->
+          <a href="{% url 'board:download' id=board.id %}">{{ board.original_file_name }}</a>
+        </td>
+      </tr>
+      {% endif %}
     </table>
     <br />
     <!-- 수정, 삭제 -->
     <!-- username끼리 비교하려면 아래처럼 -->
-    {% comment %} {% if board.author == user %} board.author는 user하고 비교한다 {% endcomment %}
+    <!-- { % if board.author == user % } board.author는 user하고 비교한다 -->
     {% if board.author.username == user.username %}
       <a href="{% url 'board:update' board.id %}">수정</a>&nbsp; 
       <a href="{% url 'board:delete' board.id %}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>&nbsp;
@@ -115,40 +215,19 @@
       <!-- 댓글 모록 표시할 곳 -->
       <div id="replyList">
         
-        <!-- board 객체 뿐만 아니라 board와 FK로 엮인 객체는 -->
-        <!-- board.모델이름_set으로 가져올 수 있다. -->
-        <!-- {% if board.reply_set %}
-          {% for reply in board.reply_set.all %}
-            {{ reply }}&nbsp;&nbsp;&nbsp;
-            <br>
-            {% endfor %}
-            <a href="#" onclick="showUpdateForm('{{reply.id}}')">수정</a> / 
-            <a href="{ % url 'board:delete_reply' id=board.id rid=reply.id %}">삭제</a>
-            {% else %}
-            <p>등록된 댓글이 없습니다.</p>
-            {% endif %} -->
-          
-
-        
-        
       </div>
       
       <!-- 댓글 입력 폼 -->
       <div id="replyForm">
-        {% if not update %} <!-- context에 update에 대한 값을 찾지 못했을 때 -->
-        <form action="{% url 'board:write_reply' board.id %}" method="post">
-          {% csrf_token %}
-          <textarea name="replyText"></textarea>
-          <input type="submit" value="댓글쓰기">
-        </form>
-        {% else %}
-        <form action="{% url 'board:update_reply' board.id %}" method="post">
-          {% csrf_token %}
-          <input type="hidden" name = "rid" value="{{ reply.id }}">
-          <textarea name="replyText">{{ reply.reply_content }}</textarea>
-          <input type="submit" value="수정">
-        </form>
-        {% endif %}
+        <div id="writeForm"> <!-- 글쓰기 폼 -->
+          <textarea name="replyText" id="replyTextWrite"></textarea>
+          <input type="button" value="댓글쓰기" id="btnWrite">
+        </div>
+        <div id="updateForm">
+          <input type="hidden" name = "rid" value="" id="rid">
+          <textarea name="replyText" id="replyTextUpdate"></textarea>
+          <input type="button" value="댓글수정" id="btnUpdate">
+        </div>
       </div>
     </div>
     <br />

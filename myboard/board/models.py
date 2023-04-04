@@ -15,6 +15,10 @@ class Board(models.Model):
     # DB에는 필드이름_기본키 이름으로 열이 생성됨
     author = models.ForeignKey(User, on_delete = models.CASCADE) # 로그인 정보로 글쓴이
 
+    # 파일첨부 관련 필드
+    attached_file = models.FileField(upload_to='board/%Y-%m-%d/', null=True)
+    original_file_name = models.CharField(max_length=260, null=True)
+
     # Java의 tostring이랑 비슷
     # 객체정보를 문자열로 돌려줌
     # admin페이지에서 글 제목으로 보려고

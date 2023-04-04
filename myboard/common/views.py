@@ -86,3 +86,4 @@ def update(request):
 
 def read(request):
     return render(request, 'common/read.html')
+

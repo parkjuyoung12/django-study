@@ -22,5 +22,6 @@ a:hover {
   font-weight: bold;
 } 
 
-
-
+.replyCount {
+  font-size: small;
+}

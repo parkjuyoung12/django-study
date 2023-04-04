@@ -1,0 +1,58 @@
+JAR파일
+Java ARchive 자바 소스코드의 모음
+
+thymeleaf(타임리프)
+
+src - main - java (Java-Application 소스코드)
+	  - resources (html파일, js파일, css, 각종 설정 파일들 (app, mybatis, mapper등) )
+
+main methods -> 여기부터 실행한다고 지정하는 것.
+
+resources 폴더
+ - templates : 어플리케이션의 결과 등을 표시할 .html 파일들이 들어감
+ - static(정적인, 변하지 않는 것) :  js, css, 각종 이미지 또는 리소스들(로딩 후 변하지 않는 것)	
+ - application.properties : 스프링부트 어플리케이션의 설정파일
+
+@ (anotation , 어노테이션) : 프레임워크 내부에서 해당 클래스 또는 메서드 등의 역할을 정의
+com.boot.controller 패키지 만들기
+controller 패키지 내부에 새 클래스 -> 
+
+http의 전송방식
+GET   : 주소에 데이터를 담아서 서버에  보냄
+POST : HTTP 요청에 data담아서 서버에 보냄
+
+localhost:8888/?name=abc
+주소뒤에 ?key=value 형식으로 된 문자열 : Query String
+쿼리스트링에 들어가는 Key의 이름은 실행할 메서드의 파라미터 이름과 일치해야한다.
+
+여러개 보낼때
+localhost:8888/?name=abc&age=20
+
+raw : a. 날것의
+row : n. 행
+
+List : 번지수로 데이터 관리 하기 때문에 중복 가능
+Map : Key, Value 쌍으로 이루어져 있는것. (key가 중복되어서는 안됨)
+Set  : 구슬주머니(중복 값 제거, 순서가 없음) 중복된거를 넣게 될 경우 
+예전에 있던게 사라지고
+마지막에 들어온걸로 업데이트됨.
+
+클라이언트에서 submit 을 눌렀을때 서버로 값을 보낼때 필요함
+
+
+@controller
+주소 해석
+
+@service 
+자료 가공
+
+@Repository
+@Mapper
+마이바티스와 자바의 인터페이스
+
+수정기능 만들기
+- 준비물 : 수정페이지(html), Controller에 주소 정의, service, Dao 에 해당 기능 정의
+- Controller에 주소를 2개 정의
+  - 클라이언트에 화면을 표시하는 기능의 주소(get)
+  - 클라이언트에서 정보를 보냈을때 실행할 기능의 주소(post)
+	
